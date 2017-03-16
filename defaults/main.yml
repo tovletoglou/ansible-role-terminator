@@ -1,0 +1,14 @@
+---
+
+# Deploy and overwrite the Terminator configuration file (true | false).
+terminator_overwrite_config: true
+
+# Terminator configuration template file. The default have my personal preferences.
+terminator_template: templates/config.j2
+
+# User list that will deploy the configuration. The default will get the ansible user.
+terminator_users:
+  - {
+      name: "{{ ansible_user_id }}",
+      home: "{{ ansible_user_dir }}",
+    }

@@ -1,0 +1,34 @@
+---
+
+- name: Install Terminator
+  package:
+    name: terminator
+    state: latest
+
+- name: Create array with users
+  shell: "cut -d: -f1 /etc/passwd"
+  register: system_users
+  changed_when: false # This will never report 'changed' status. But it will report 'ok', 'unreachable' or 'failed'
+
+- name: Create Terminator configuration directory
+  file:
+    path: "{{ item.home }}/.config/terminator"
+    state: directory
+    mode: 0775
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  when: "'{{ item.name }}' in system_users.stdout_lines"
+  with_items: "{{ terminator_users }}"
+
+- name: Configure Terminator
+  template:
+    src: "{{ terminator_template }}"
+    dest: "{{ item.home }}/.config/terminator/config"
+    backup: yes
+    mode: 0664
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+  become: yes
+  become_user: "{{ item.name }}"
+  when: "'{{ item.name }}' in system_users.stdout_lines and {{ terminator_overwrite_config }}"
+  with_items: "{{ terminator_users }}"
