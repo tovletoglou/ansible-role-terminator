@@ -1,6 +1,7 @@
 ---
 
 - name: Install Terminator
+  become: yes
   package:
     name: terminator
     state: latest
@@ -11,16 +12,20 @@
   changed_when: false # This will never report 'changed' status. But it will report 'ok', 'unreachable' or 'failed'
 
 - name: Create Terminator configuration directory
+  become: yes
+  become_user: "{{ item.name }}"
   file:
     path: "{{ item.home }}/.config/terminator"
     state: directory
     mode: 0775
     owner: "{{ item.name }}"
     group: "{{ item.name }}"
-  when: "'{{ item.name }}' in system_users.stdout_lines"
+  when: "'{{ item.name }}' in system_users.stdout_lines and {{ terminator_overwrite_config }}"
   with_items: "{{ terminator_users }}"
 
 - name: Configure Terminator
+  become: yes
+  become_user: "{{ item.name }}"
   template:
     src: "{{ terminator_template }}"
     dest: "{{ item.home }}/.config/terminator/config"
@@ -28,7 +33,5 @@
     mode: 0664
     owner: "{{ item.name }}"
     group: "{{ item.name }}"
-  become: yes
-  become_user: "{{ item.name }}"
   when: "'{{ item.name }}' in system_users.stdout_lines and {{ terminator_overwrite_config }}"
   with_items: "{{ terminator_users }}"
