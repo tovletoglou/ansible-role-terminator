@@ -1,7 +1,7 @@
 ---
 
 # Deploy and overwrite the Terminator configuration file (true | false).
-terminator_overwrite_config: true
+terminator_overwrite_config: false
 
 # Terminator configuration template file. The default have my personal preferences.
 terminator_template: templates/config.j2
