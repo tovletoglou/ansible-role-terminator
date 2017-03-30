@@ -12,21 +12,21 @@ The role may run on other systems, but it is not tested.
 
 ## Role Variables
 
-Deploy and overwrite the Terminator configuration file (true | false).
+Deploy and overwrite the Terminator configuration file (`true | false`).
 
-```
+```yml
 terminator_overwrite_config: true
 ```
 
 Terminator configuration template file. The default have my personal preferences.
 
-```
-terminator_template: templates/config.j
+```yml
+terminator_template: templates/config.j2
 ```
 
 User list that will deploy the configuration. The default will get the ansible user.
 
-```
+```yml
 terminator_users:
   - {
       name: "{{ ansible_user_id }}",
@@ -38,7 +38,7 @@ terminator_users:
 
 ### Simple
 
-```
+```yml
 - hosts: all
   roles:
     - ansible-role-terminator
@@ -49,15 +49,15 @@ terminator_users:
 File structure:
 
 ```
-roles/ansible-role-terminator/**
-templates/custom_terminator_conf.j2
-my_playbook.yml
-hosts
+./roles/ansible-role-terminator/**
+./templates/custom_terminator_conf.j2
+./my_playbook.yml
+./hosts
 ```
 
 `my_playbook.yml`:
 
-```
+```yml
 - hosts: all
   roles:
     - ansible-role-terminator
@@ -77,16 +77,12 @@ hosts
 
 `hosts`:
 
-```
+```ini
 [all]
 localhost ansible_connection=local
 ```
 
-`custom_terminator_conf.j2`:
-
-```
-see: https://github.com/tovletoglou/ansible-role-terminator/templates/config.j2
-```
+`custom_terminator_conf.j2`: [templates/config.j2](templates/config.j2)
 
 ## Dependencies
 
