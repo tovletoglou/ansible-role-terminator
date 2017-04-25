@@ -20,7 +20,7 @@
     mode: 0775
     owner: "{{ item.name }}"
     group: "{{ item.name }}"
-  when: "'{{ item.name }}' in system_users.stdout_lines and {{ terminator_overwrite_config }}"
+  when: item.name in system_users.stdout_lines and terminator_overwrite_config
   with_items: "{{ terminator_users }}"
 
 - name: Configure Terminator
@@ -33,5 +33,5 @@
     mode: 0664
     owner: "{{ item.name }}"
     group: "{{ item.name }}"
-  when: "'{{ item.name }}' in system_users.stdout_lines and {{ terminator_overwrite_config }}"
+  when: item.name in system_users.stdout_lines and terminator_overwrite_config
   with_items: "{{ terminator_users }}"
